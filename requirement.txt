@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+psycopg2
+sqlalchemy
+pinecone
+pydantic
+ollama
+openai
+fitz
+langchain_pinecone
+langchain_openai
+datetime
