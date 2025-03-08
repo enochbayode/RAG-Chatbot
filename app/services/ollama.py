@@ -1,26 +1,29 @@
-# Interface for calling Ollama2:7B
-
 # app/services/ollama.py
 
-from openai import OpenAI
+import openai
 import os
+from dotenv import load_dotenv
 
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
+# Load API key from .env file (optional but recommended)
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")  # getting the Opeanai API key from .env file
 
 def ollama_bot(context: str, query: str):
     """
-    Generates a response using the Ollama model.
+    Uses OpenAI's GPT API to generate responses.
     - `context`: Relevant text retrieved from vector database.
-    - `query`: The user's question.
+    - `query`: User's question.
     """
-    client = OpenAI(base_url="http://localhost:11434")  # Assuming Ollama is running locally
-
-    response = client.completions.create(
-        model=OLLAMA_MODEL,
-        messages=[
-            {"role": "system", "content": "You are a helpful chatbot that answers based on the provided context."},
-            {"role": "user", "content": f"Context: {context}\n\nQuery: {query}"}
-        ]
+    prompt = f"Context: {context}\n\nQuery: {query}\n\nAnswer concisely:"
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # cheaper & faster
+        messages=[{"role": "system", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": prompt}],
+        temperature=0.5,  # Adjust creativity (0 = strict, 1 = very creative)
+        max_tokens=200  # Control response length
     )
 
-    return response["choices"][0]["message"]["content"]
+    return response["choices"][0]["message"]["content"].strip()
+
+

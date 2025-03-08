@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Use public IP for external access (or private IP if inside VPC)
+# getting the Postgres database url from .env file
 DATABASE_URL = f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_PUBLIC_IP')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
 
 
@@ -37,21 +37,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # Dependency function to get database session
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-
 def get_db():
     db = SessionLocal()
     try:
         yield db
-        db.commit()  # Ensure commit happens
-    except Exception as e:
-        db.rollback()
-        raise e
     finally:
         db.close()

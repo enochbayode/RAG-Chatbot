@@ -1,6 +1,7 @@
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings  # Use SentenceTransformers
 from app.services.ollama import ollama_bot  # Import Ollama chatbot instance
 
 import os
@@ -26,7 +27,13 @@ if index_name not in [idx.name for idx in pc.list_indexes()]:
 index = pc.Index(index_name)
 
 # Create Vector Store using LangChain's Pinecone wrapper
-vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
+#vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
+
+# Use SentenceTransformers for embedding instead of OpenAI
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+# Create Vector Store using LangChain's Pinecone wrapper
+vector_store = PineconeVectorStore(index, embedding_model, text_key="text")
 
 #-----------------------------
 
@@ -34,7 +41,7 @@ def retrieve_relevant_docs(query: str, organization_id: str):
     """Fetch relevant documents specific to an organization."""
     query_results = vector_store.similarity_search(
         query, 
-        k=2,  # Retrieve top 5 relevant docs
+        k=2,  # Retrieving the top 2 relevant docs
         namespace=organization_id
     )
     return query_results
@@ -48,8 +55,7 @@ def generate_response(query: str, organization_id: str):
 
     # Format context for Ollama
     context = "\n".join([doc.page_content for doc in relevant_docs])
-    prompt = f"Context: {context}\n\nUser Query: {query}"
+    #prompt = f"Context: {context}\n\nUser Query: {query}"
     
-    # Use Ollama to generate a response
-    response = ollama_bot.generate_response(prompt)
+    response = ollama_bot(context, query) #calling as a function
     return response
