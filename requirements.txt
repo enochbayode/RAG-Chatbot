@@ -10,3 +10,5 @@ fitz
 langchain_pinecone
 langchain_openai
 datetime
+google-cloud-storage
+pdfplumber

@@ -17,6 +17,7 @@ if not DATABASE_URL:
     raise ValueError("DATABASE_URL is not set in the environment variables")
 
 # Create database engine with connection pooling
+engine = None
 try: 
     engine = create_engine(
         DATABASE_URL,
