@@ -1,0 +1,35 @@
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot', '.']
+
+  # Step 2: Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot']
+
+  # Step 3: Deploy the image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'run', 'deploy', 'flask-app',          # Name of the service
+        '--image', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot',  # Docker image
+        '--platform', 'managed',              # Managed Cloud Run
+        '--region', 'us-central1',            # Replace with your region
+        '--allow-unauthenticated',             # Allow public access
+        '--memory', '2Gi',                    # Increase memory limit to 1 GiB
+        '--cpu', '2'                         # Allocate 2 CPUs
+      ]
+
+# Specify the Cloud Run service account (optional, remove if unnecessary)
+#   This assumes your service account is pre-configured
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'iam', 'service-accounts', 'add-iam-policy-binding',
+        'telepractice-pro-dev@telepracticepro-dev.iam.gserviceaccount.com',
+        '--member=allUsers',
+        '--role=roles/run.invoker',
+      ]
+
+images:
+  - 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot'
