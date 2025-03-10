@@ -3,6 +3,7 @@ from pinecone import Pinecone
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from app.models.document import Document
+import time
 
 from google.cloud import storage
 import fitz  # PyMuPDF for PDF text extraction
@@ -42,61 +43,58 @@ gcs_client = storage.Client()
 
 # ----------- FUNCTIONS -----------
 
-import time
-import openai
+# from sentence_transformers import SentenceTransformer
 
-from sentence_transformers import SentenceTransformer
+# # Load Sentence-Transformers model instead of OpenAI
+# embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-# Load Sentence-Transformers model instead of OpenAI
-embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
-# Function to generate embeddings
-def generate_embedding(text: str, use_openai: bool = False):
-    """Generate an embedding using either OpenAI or Hugging Face's Sentence-Transformers."""
-    if use_openai:
-        try:
-            response = openai.embeddings.create(
-                model="text-embedding-ada-002",
-                input=text
-            )
-            return response.data[0].embedding
+# Function to generate embeddings with either OpenAI or Hugging face
+# def generate_embedding(text: str, use_openai: bool = False):
+#     """Generate an embedding using either OpenAI or Hugging Face's Sentence-Transformers."""
+#     if use_openai:
+#         try:
+#             response = openai.embeddings.create(
+#                 model="text-embedding-ada-002",
+#                 input=text
+#             )
+#             return response.data[0].embedding
         
-        except openai.RateLimitError:
-            logging.warning("⚠️ Rate limit exceeded, retrying in 10 seconds...")
-            time.sleep(10)
-            return generate_embedding(text, use_openai=True)  # Recursive retry
+#         except openai.RateLimitError:
+#             logging.warning("⚠️ Rate limit exceeded, retrying in 10 seconds...")
+#             time.sleep(10)
+#             return generate_embedding(text, use_openai=True)  # Recursive retry
 
-        except openai.APIError as e:
-            if e.code == "insufficient_quota":
-                logging.error("❌ OpenAI API quota exceeded. Please check billing.")
-                raise ValueError("OpenAI quota exceeded. Upgrade your plan.")
-            else:
-                logging.error(f"❌ OpenAI API error: {e}")
-                raise e
-    else:
-        # Generate embedding using Hugging Face SentenceTransformers
-        return embedding_model.encode(text).tolist()  # Convert to list for compatibility
+#         except openai.APIError as e:
+#             if e.code == "insufficient_quota":
+#                 logging.error("❌ OpenAI API quota exceeded. Please check billing.")
+#                 raise ValueError("OpenAI quota exceeded. Upgrade your plan.")
+#             else:
+#                 logging.error(f"❌ OpenAI API error: {e}")
+#                 raise e
+#     else:
+#         # Generate embedding using Hugging Face SentenceTransformers
+#         return embedding_model.encode(text).tolist()  # Convert to list for compatibility
 
-# def generate_embedding(text: str):
-#     """Generate an embedding using OpenAI, with retry logic for quota errors."""
-#     try:
-#         response = client.embeddings.create(
-#             # model="text-embedding-ada-002",
-#             input=text
-#         )
-#         return response.data[0].embedding
-#     except openai.RateLimitError:
-#         logging.warning("⚠️ Rate limit exceeded, retrying in 10 seconds...")
-#         time.sleep(10)  # Wait and retry
-#         return generate_embedding(text)  # Recursive retry
+def generate_embedding(text: str):
+    """Generate an embedding using OpenAI, with retry logic for quota errors."""
+    try:
+        response = client.embeddings.create(
+            model="text-embedding-ada-002",  # 1536 dimension with cosine metric
+            input=text
+        )
+        return response.data[0].embedding
+    except openai.RateLimitError:
+        logging.warning("⚠️ Rate limit exceeded, retrying in 10 seconds...")
+        time.sleep(10)  # Wait and retry
+        return generate_embedding(text)  # Recursive retry
     
-#     except openai.APIError as e:
-#         if e.code == "insufficient_quota":
-#             logging.error("❌ OpenAI API quota exceeded. Please check billing.")
-#             raise ValueError("OpenAI quota exceeded. Upgrade your plan.")
-#         else:
-#             logging.error(f"❌ OpenAI API error: {e}")
-#             raise e
+    except openai.APIError as e:
+        if e.code == "insufficient_quota":
+            logging.error("❌ OpenAI API quota exceeded. Please check billing.")
+            raise ValueError("OpenAI quota exceeded. Upgrade your plan.")
+        else:
+            logging.error(f"❌ OpenAI API error: {e}")
+            raise e
 
 
 

@@ -1,7 +1,7 @@
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
-from langchain.embeddings import HuggingFaceEmbeddings  # Use SentenceTransformers
+# from langchain.embeddings import HuggingFaceEmbeddings  # Use SentenceTransformers
 from app.services.ollama import ollama_bot  # Import Ollama chatbot instance
 
 import os
@@ -26,11 +26,12 @@ if index_name not in [idx.name for idx in pc.list_indexes()]:
 # Connect to the Pinecone index
 index = pc.Index(index_name)
 
-# Create Vector Store using LangChain's Pinecone wrapper
-#vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
+# using OpenAI for embedding 
+Create Vector Store using LangChain's Pinecone wrapper
+vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
 
-# Use SentenceTransformers for embedding instead of OpenAI
-embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Use Hugging face (SentenceTransformers) for embedding  
+#embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # Create Vector Store using LangChain's Pinecone wrapper
 vector_store = PineconeVectorStore(index, embedding_model, text_key="text")
