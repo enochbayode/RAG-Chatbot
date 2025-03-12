@@ -18,14 +18,14 @@ storage_client = storage.Client()
 BUCKET_NAME = os.getenv("BUCKET_NAME")  # Ensure this is set in your environment variables
 
 @router.delete("/delete/{organization_id}/{document_id}")
-async def delete_pdf(organization_id: str, document_id: int, db: Session = Depends(get_db)):
+async def delete_pdf(organization_id: str, document_id: str, db: Session = Depends(get_db)):
     """
     Deletes a PDF file from Google Cloud Storage, removes metadata from PostgreSQL, 
     and deletes associated embeddings from Pinecone. Ensures that an organization 
     can only delete its own documents.
     """
     # Find the document in PostgreSQL, filtering by org_id
-    doc = db.query(Document).filter(Document.id == document_id, Document.organization_id == organization_id).first()
+    doc = db.query(Document).filter(Document.chat_bot_resource_id == document_id, Document.organization_id == organization_id).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found or access denied")
 

@@ -1,5 +1,6 @@
 # app/core/vector_db.py
 from pinecone import Pinecone
+import openai
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from app.models.document import Document
@@ -79,7 +80,7 @@ def generate_embedding(text: str):
     """Generate an embedding using OpenAI, with retry logic for quota errors."""
     try:
         response = client.embeddings.create(
-            model="text-embedding-ada-002",  # 1536 dimension with cosine metric
+            model="text-embedding-3-small",  # 1536 dimension with cosine metric
             input=text
         )
         return response.data[0].embedding
