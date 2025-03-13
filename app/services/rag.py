@@ -1,7 +1,6 @@
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
-# from langchain.embeddings import HuggingFaceEmbeddings  # Use SentenceTransformers
 from app.services.ollama import ollama_bot  # Import Ollama chatbot instance
 
 import os
@@ -30,12 +29,6 @@ index = pc.Index(index_name)
 # Create Vector Store using LangChain's Pinecone wrapper
 vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
 
-# Use Hugging face (SentenceTransformers) for embedding  
-#embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-# Create Vector Store using LangChain's Pinecone wrapper
-# vector_store = PineconeVectorStore(index, embedding_model, text_key="text")
-
 #-----------------------------
 
 def retrieve_relevant_docs(query: str, organization_id: str):
@@ -56,9 +49,8 @@ def generate_response(query: str, organization_id: str):
     if not relevant_docs:
         return "No relevant information found."
 
-    # Format context for Ollama
+    # Format context for gpt
     context = "\n".join([doc.page_content for doc in relevant_docs])
-    #prompt = f"Context: {context}\n\nUser Query: {query}"
     
     response = ollama_bot(context, query) #calling as a function
     return response

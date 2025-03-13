@@ -2,12 +2,6 @@ from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-# credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-
 # Import routers
 from app.api.routes.upload import router as upload_router
 from app.api.routes.chatbot import router as chat_router

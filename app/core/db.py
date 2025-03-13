@@ -11,8 +11,6 @@ load_dotenv()
 DATABASE_URL = f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_PUBLIC_IP')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
 
 
-# DATABASE_URL = os.getenv("DATABASE_URL")
-
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL is not set in the environment variables")
 

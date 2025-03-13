@@ -56,11 +56,8 @@ async def upload_pdf(organization_id: str, file: UploadFile = File(...), db: Ses
         db.refresh(new_doc)
         print(f"✅ After Commit: {new_doc.__dict__}")  # Check values after commit
 
-        # Generate embeddings from the file URL (optional, if required)
-        
-        # upsert_document(org_id_cleaned, str(new_doc.chat_bot_resource_id), file_url)
+        # Generate embeddings from the file URL
         upsert_document(db, org_id_cleaned, str(new_doc.chat_bot_resource_id))
-        #print (upsert_document)
 
         return {"message": "PDF uploaded successfully", "document_id": new_doc.chat_bot_resource_id, "file_url": file_url}
 
