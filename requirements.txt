@@ -1,40 +1,40 @@
 # FastAPI for Web Framework
-fastapi==0.110.0
-uvicorn==0.29.0  
+fastapi
+uvicorn 
 
 # OpenAI API
 openai
 langchain-openai
 
 # Pinecone Vector Database
-pinecone-client==3.2.2
-langchain-pinecone==0.2.3  
+pinecone-client
+langchain-pinecone  
 
 # Embeddings (OpenAI & Hugging Face)
-langchain==0.1.14  
-transformers==4.39.3
-torch==2.2.2  
+langchain  
+transformers
+torch
 
 # Google Cloud Storage
-google-cloud-storage==2.16.0  
+google-cloud-storage 
 
 # SQLAlchemy for Database Management
-SQLAlchemy==2.0.28  
-asyncpg==0.29.0  
+SQLAlchemy  
+asyncpg
 
 # PDF Processing
-pdfplumber==0.11.0  
-pymupdf==1.23.9  # fitz (PyMuPDF) for PDF text extraction
+pdfplumber  
+pymupdf  # fitz (PyMuPDF) for PDF text extraction
 
 # Environment Variables
-python-dotenv==1.0.1  
+python-dotenv  
 
 # Data Validation (Pydantic)
-pydantic==2.6.4  
-pydantic-settings==2.1.0  # If using Pydantic for env settings
+pydantic  
+pydantic-settings  # If using Pydantic for env settings
 
 # Other Utilities
-requests==2.31.0  
-numpy==1.26.4  
-pandas==2.2.1  
-urllib3==2.2.1  # Handles URL parsing and HTTP requests
+requests  
+numpy  
+pandas 
+urllib3  # Handles URL parsing and HTTP requests
