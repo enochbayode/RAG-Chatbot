@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "telepracticepro-dev",
+  "private_key_id": "a47bdf7e24f244b0e60317799691f3e9d8fe1742",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDSKqilZvnyFC+S\nYur3PJSyH6Nuy+NCR7IIWhE8Di4rdmuNtkoQNbTFPQra2la7GNCo49Lixj6yokQs\nzDzM/v7xw3BTSfqoDscVSxUOcLsYTlKeR6JbtjUjAFkOI3wRa7zG3/mGE+h/D/9p\nqL0RqvYb4Dqj/Yd1z2TY4ALAnnKBTJMcS0UgFX7RCv9ZN4B12lSWk9gFL+/NuPHl\nRS4DaPvOb4jwbeTTixQySdxp8u57OiwnV8eDRN3pZM1Z1s7BdCZq4GC+lcJmivCt\n0ysuoOBmkZ8BdwyS+3N/Sq1QqQ7sw9QvTohpr2/1d1/nWX2L6MhA6l2gmI9GtzYh\nr3caBRxbAgMBAAECggEABFKkTWKk2XnY0KYANz2jwVYtQmYnMoHPA6T2ncmc4X/6\nDlwlgdfY9AWhZ4b+KbME97RX7hotx/bWeCVrSrwj+k0OzmfDJBnJtoJo2HcxIfra\ncC8BA+nnheTH8CaCsskIhP6uXzehnJtzoXS7DtX5YfFmw2C/nIi7hkp1RAj+SfKD\nsdVf7qsNQWoKbhGnLe8FsZOOAobctWAbdJJFEDZXw0lWSE77RlpSKdEjCxlwcKf0\n/0Y9SadopsWyRoAeKfJy1Vtd+XX/apQReCB7H1l11DCXn6bqrPbronNeDZi43TRV\nkOdlnjsACNpV9KVSXqXsKto+ssJIcCehYTfnwt4WwQKBgQD64GVaN4Uu067HVx7/\ns0mHgD3I4f+XqiQ3b9pxnUAHYp+F9WrxV2t7iu84dbkr5o6pLuslz0Z+HtWqSVaT\nlqewFJBvJRNbvVb/kuRL3owLGgOX5Rs5NyOMW7qRjaCGRhkI5gjekYEkbMXYEbrO\nvoxmsjfNTfym3bG+1IuYQOsnEwKBgQDWdW2O+79sxIVE5ruW3kEb+f4E3eVI5qeP\nyitgAsJoVlVpOE15sDxdYBSW/sTcxTY2ZHBSuGtTOQVxRTiyzHyNKdXEn5eBI5p8\nFT7HCVLmdR2iypgns6iw8Z2vtZejoeG40dM86AQVoI1LQaBjmmjCpQdZcAx81mWm\nPPGMR6h2mQKBgDsuXDpgBob5YK2dm65uONZCJlERHx5EAK8jL8DFe6lCVqdfMY8l\nNDG8oJoNC1WT2euHKemNb++ojnbRPh8q1vvunfPaJyrpC3DW0gwjv52O0XIvlbB1\nlWky6lwTsN58AsPaoBUA9hoFntZNuGe1A6HmQMuprgQfICMIOLX9+nsJAoGAASo6\nIiCz9X9LyggG1Nb4O5KsEpKyACdgmaNbgPYC4FY3uI6ZvSN78HXpJrjTkO9xT/JT\nud9OlfElWmwp1q7NrmafxqWnSQhMeogTAznFvYK9WnkHQo/zRqLJXH78B+OFOl/J\nafdIrmVk3xfIK0JXd1c2JwI4zyTLAJAsL7rj62ECgYAFYjRb5PrRYTKely/0+WXZ\narKpnwniHA0j97cv5LN1RK56ThxZWx10x0mTdG3YQuzlUDen+yia5FgZSm2cwWiH\n9zWmmwIna9NgeUGq4UrM9NQaQwJ5AWU+IWwkQwwL/5iRAFDVOKmWx0g7vMQXn1sz\np+ECh0MNq690d2h0pmiJRQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "telepractice-pro-dev@telepracticepro-dev.iam.gserviceaccount.com",
+  "client_id": "110294627268036311408",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/telepractice-pro-dev%40telepracticepro-dev.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
