@@ -1,14 +1,44 @@
+# FastAPI for Web Framework
 fastapi
-uvicorn
-psycopg2
-sqlalchemy
-pinecone
-pydantic
-ollama
+uvicorn 
+
+# OpenAI API
 openai
-fitz
-langchain_pinecone
-langchain_openai
-datetime
-google-cloud-storage
-pdfplumber
+langchain-openai
+
+# Pinecone Vector Database
+pinecone-client
+langchain-pinecone  
+
+# Embeddings (OpenAI & Hugging Face)
+langchain  
+transformers
+torch
+
+# Google Cloud Storage
+google-cloud-storage 
+
+# SQLAlchemy for Database Management
+SQLAlchemy  
+asyncpg
+
+# PDF Processing
+pdfplumber  
+pymupdf  # fitz (PyMuPDF) for PDF text extraction
+
+# Environment Variables
+python-dotenv  
+
+# Data Validation (Pydantic)
+pydantic  
+pydantic-settings  # If using Pydantic for env settings
+
+# Other Utilities
+requests  
+numpy  
+pandas 
+urllib3  # Handles URL parsing and HTTP requests
+
+
+flake8
+black

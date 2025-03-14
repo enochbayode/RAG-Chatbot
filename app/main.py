@@ -2,12 +2,6 @@ from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-# credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-
 # Import routers
 from app.api.routes.upload import router as upload_router
 from app.api.routes.chatbot import router as chat_router
@@ -29,9 +23,13 @@ app.include_router(upload_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
 app.include_router(delete_router, prefix="/api")
 
+
 @app.get("/")
 def home():
-    return {"message": "Welcome to the TelepracticePro Multi-Tenant Chatbot built on FastAPI"}
+    return {
+        "message": "Welcome to the TelepracticePro Multi-Tenant Chatbot built on FastAPI"
+    }
+
 
 # Run the app
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
-from langchain.embeddings import HuggingFaceEmbeddings  # Use SentenceTransformers
 from app.services.ollama import ollama_bot  # Import Ollama chatbot instance
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Get API key and index name from environment variables
@@ -26,36 +26,34 @@ if index_name not in [idx.name for idx in pc.list_indexes()]:
 # Connect to the Pinecone index
 index = pc.Index(index_name)
 
+# using OpenAI for embedding
 # Create Vector Store using LangChain's Pinecone wrapper
-#vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
+vector_store = PineconeVectorStore(index, OpenAIEmbeddings(), text_key="text")
 
-# Use SentenceTransformers for embedding instead of OpenAI
-embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# -----------------------------
 
-# Create Vector Store using LangChain's Pinecone wrapper
-vector_store = PineconeVectorStore(index, embedding_model, text_key="text")
-
-#-----------------------------
 
 def retrieve_relevant_docs(query: str, organization_id: str):
-    """Fetch relevant documents specific to an organization."""
-    query_results = vector_store.similarity_search(
-        query, 
-        k=2,  # Retrieving the top 2 relevant docs
-        namespace=organization_id
-    )
-    return query_results
+    """Fetch relevant documents specific to an organization with error handling."""
+    try:
+        query_results = vector_store.similarity_search(
+            query, k=2, namespace=organization_id
+        )
+        return query_results
+    except Exception as e:
+        print(f"Error retrieving documents: {e}")
+        return []
+
 
 def generate_response(query: str, organization_id: str):
     """Retrieves relevant docs and generates a chatbot response using Ollama."""
     relevant_docs = retrieve_relevant_docs(query, organization_id)
-    
+
     if not relevant_docs:
         return "No relevant information found."
 
-    # Format context for Ollama
+    # Format context for gpt
     context = "\n".join([doc.page_content for doc in relevant_docs])
-    #prompt = f"Context: {context}\n\nUser Query: {query}"
-    
-    response = ollama_bot(context, query) #calling as a function
+
+    response = ollama_bot(context, query)  # calling as a function
     return response
