@@ -16,8 +16,8 @@ steps:
         '--platform', 'managed',              # Managed Cloud Run
         '--region', 'us-central1',            # Replace with your region
         '--allow-unauthenticated',             # Allow public access
-        '--memory', '2Gi',                    # Increase memory limit to 1 GiB
-        '--cpu', '2'                         # Allocate 2 CPUs
+        '--memory', '1Gi',                    # Increase memory limit to 1 GiB
+        '--cpu', '1'                         # Allocate 2 CPUs
       ]
 
 # Specify the Cloud Run service account (optional, remove if unnecessary)

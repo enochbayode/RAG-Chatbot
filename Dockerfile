@@ -25,6 +25,9 @@ COPY . .
 EXPOSE 8080
 EXPOSE 11434
 
-# Start ollama and the gunicorn
-CMD ["sh", "-c", "ollama serve & sleep 5 && ollama run llama3.2:1b && gunicorn -b 0.0.0.0:8080 app:app"]
+# Copy the .env file
+COPY .env .
+
+# Modify the CMD to load the .env file
+CMD ["sh", "-c", "set -a && source .env && set +a && gunicorn -b 0.0.0.0:8080 app:app"]
 
