@@ -38,3 +38,6 @@ requests
 numpy  
 pandas 
 urllib3  # Handles URL parsing and HTTP requests
+
+
+flake8
