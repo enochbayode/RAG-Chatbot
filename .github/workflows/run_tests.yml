@@ -29,6 +29,11 @@ jobs:
     #  run: |
     #    pytest
 
+    - name: Black
+      run: |
+        black . --check
+
+
     - name: Lint code
       run: |
         flake8 .  

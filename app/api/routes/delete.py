@@ -9,30 +9,47 @@ from app.models.document import Document
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 router = APIRouter()
 
 # Initialize Google Cloud Storage Client
 storage_client = storage.Client()
-BUCKET_NAME = os.getenv("BUCKET_NAME")  # Ensure this is set in your environment variables
+BUCKET_NAME = os.getenv(
+    "BUCKET_NAME"
+)  # Ensure this is set in your environment variables
+
 
 @router.delete("/delete/{organization_id}/{document_id}")
-async def delete_pdf(organization_id: str, document_id: str, db: Session = Depends(get_db)):
+async def delete_pdf(
+    organization_id: str, document_id: str, db: Session = Depends(get_db)
+):
     """
-    Deletes a PDF file from Google Cloud Storage, removes metadata from PostgreSQL, 
-    and deletes associated embeddings from Pinecone. Ensures that an organization 
+    Deletes a PDF file from Google Cloud Storage, removes metadata from PostgreSQL,
+    and deletes associated embeddings from Pinecone. Ensures that an organization
     can only delete its own documents.
     """
     # Find the document in PostgreSQL, filtering by org_id
-    doc = db.query(Document).filter(Document.chat_bot_resource_id == document_id, Document.organization_id == organization_id).first()
+    doc = (
+        db.query(Document)
+        .filter(
+            Document.chat_bot_resource_id == document_id,
+            Document.organization_id == organization_id,
+        )
+        .first()
+    )
     if not doc:
-        raise HTTPException(status_code=404, detail="Document not found or access denied")
+        raise HTTPException(
+            status_code=404, detail="Document not found or access denied"
+        )
 
     # Extract file path from URL
     file_url = doc.file_url
     if not file_url:
-        raise HTTPException(status_code=400, detail="No file URL found for this document.")
+        raise HTTPException(
+            status_code=400, detail="No file URL found for this document."
+        )
 
     # Extract path relative to the bucket
     try:
@@ -52,10 +69,14 @@ async def delete_pdf(organization_id: str, document_id: str, db: Session = Depen
         db.commit()
 
         # Delete document vector from Pinecone
-        delete_document(str(document_id), organization_id)  # Function to remove embeddings
+        delete_document(
+            str(document_id), organization_id
+        )  # Function to remove embeddings
 
         return {"message": "PDF deleted successfully"}
 
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting document: {str(e)}"
+        )

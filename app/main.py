@@ -23,9 +23,13 @@ app.include_router(upload_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
 app.include_router(delete_router, prefix="/api")
 
+
 @app.get("/")
 def home():
-    return {"message": "Welcome to the TelepracticePro Multi-Tenant Chatbot built on FastAPI"}
+    return {
+        "message": "Welcome to the TelepracticePro Multi-Tenant Chatbot built on FastAPI"
+    }
+
 
 # Run the app
 if __name__ == "__main__":

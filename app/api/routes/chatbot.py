@@ -6,6 +6,7 @@ from app.services.rag import generate_response  # Use RAG for retrieval + respon
 
 router = APIRouter()
 
+
 @router.post("/chat/")
 async def chatbot(organization_id: str, query: str, db: Session = Depends(get_db)):
     """
@@ -18,8 +19,8 @@ async def chatbot(organization_id: str, query: str, db: Session = Depends(get_db
 
     if not response:
         raise HTTPException(
-            status_code=404, 
-            detail="No relevant information found for this organization."
+            status_code=404,
+            detail="No relevant information found for this organization.",
         )
 
     return {"response": response}
