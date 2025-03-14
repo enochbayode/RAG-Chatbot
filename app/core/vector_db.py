@@ -4,7 +4,6 @@ import openai
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from app.models.document import Document
-import time
 import asyncio
 
 from google.cloud import storage

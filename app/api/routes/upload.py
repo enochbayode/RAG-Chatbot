@@ -1,7 +1,6 @@
 # API for PDF upload
 
 # app/api/routes/upload.py
-import pdfplumber
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from google.cloud import storage  # Import Google Cloud Storage
 from sqlalchemy.orm import Session
