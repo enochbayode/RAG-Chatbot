@@ -41,3 +41,4 @@ urllib3  # Handles URL parsing and HTTP requests
 
 
 flake8
+black
