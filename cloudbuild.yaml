@@ -17,17 +17,29 @@ steps:
         "--platform=managed",
         "--allow-unauthenticated",
         "--no-use-http2",
-        "--cpu=1",  # Allocate 1 CPU
+        "--cpu=2",  # Allocate 1 CPU
         "--max-instances=1",  # Limit to 1 instance
         "--timeout=1800s",
-        "--memory=1Gi",
+        "--memory=2Gi",
         "--verbosity=debug",
+      ]
+
+# Specify the Cloud Run service account (optional, remove if unnecessary)
+#   This assumes your service account is pre-configured
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'iam', 'service-accounts', 'add-iam-policy-binding',
+        'telepractice-pro-dev@telepracticepro-dev.iam.gserviceaccount.com',
+        '--member=allUsers',
+        '--role=roles/run.invoker',
       ]
 
 timeout: 1200s
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
 
 images:
   - 'gcr.io/telepracticepro-dev/telepracticepro-chatbot'
