@@ -43,9 +43,6 @@ async def upload_pdf(
         blob.upload_from_file(file.file, content_type=file.content_type)
         file_url = blob.public_url  # Get the public URL of the uploaded file
 
-        print(bucket)
-        print(file_url)
-
         # Ensure `organization_id` is clean
         org_id_cleaned = os.path.basename(organization_id)  # Extract just the ID
 
@@ -55,17 +52,17 @@ async def upload_pdf(
         )
 
         db.add(new_doc)
-        print(f"✅ Before Commit: {new_doc.__dict__}")  # Check values before commit
+        #print(f"✅ Before Commit: {new_doc.__dict__}")  # Check values before commit
 
         db.commit()
         db.refresh(new_doc)
-        print(f"✅ After Commit: {new_doc.__dict__}")  # Check values after commit
+        #print(f"✅ After Commit: {new_doc.__dict__}")  # Check values after commit
 
         # Generate embeddings from the file URL
-        upsert_document(db, org_id_cleaned, str(new_doc.chat_bot_resource_id))
+        await upsert_document(db, org_id_cleaned, str(new_doc.chat_bot_resource_id))
 
         return {
-            "message": "PDF uploaded successfully",
+            "message": "PDF uploaded successfully.",
             "document_id": new_doc.chat_bot_resource_id,
             "file_url": file_url,
         }

@@ -1,16 +1,17 @@
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot', '.']
+    args: ['build', '-t', 'gcr.io/telepracticepro-dev/telepracticepro-chatbot', '.']
 
   # Step 2: Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot']
+    args: ['push', 'gcr.io/telepracticepro-dev/telepracticepro-chatbot']
 
   # Step 3: Deploy the image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
+<<<<<<< HEAD
         'run', 'deploy', 'flask-app',          # Name of the service
         '--image', 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot',  # Docker image
         '--platform', 'managed',              # Managed Cloud Run
@@ -18,6 +19,19 @@ steps:
         '--allow-unauthenticated',             # Allow public access
         '--memory', '1Gi',                    # Increase memory limit to 1 GiB
         '--cpu', '1'                         # Allocate 2 CPUs
+=======
+        'run', 'deploy', 'telepracticepro-chatbot',          # Name of the service
+        '--image', 'gcr.io/telepracticepro-dev/telepracticepro-chatbot',  # Docker image
+        "--region=us-central1",
+        "--platform=managed",
+        "--allow-unauthenticated",
+        "--no-use-http2",
+        "--cpu=2",  # Allocate 1 CPU
+        "--max-instances=1",  # Limit to 1 instance
+        "--timeout=1800s",
+        "--memory=2Gi",
+        "--verbosity=debug",
+>>>>>>> 37319e961e6126da39ae06f64e9734c72a654d3e
       ]
 
 # Specify the Cloud Run service account (optional, remove if unnecessary)
@@ -31,5 +45,11 @@ steps:
         '--role=roles/run.invoker',
       ]
 
+timeout: 1200s
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+
 images:
-  - 'gcr.io/telepracticepro-dev/telepracticepro-ml-chatbot'
+  - 'gcr.io/telepracticepro-dev/telepracticepro-chatbot'
