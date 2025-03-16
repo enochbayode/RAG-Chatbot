@@ -12,28 +12,32 @@ jobs:
       matrix:
         python-version: [3.11]
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    #- name: Run tests
-    #  run: |
-    #    pytest
+      # Add a build step to ensure the code can be built
+      - name: Build the project
+        run: |
+          python -m build
 
-    - name: Black
-      run: |
-        black . --check
+      #- name: Run tests
+      #  run: |
+      #    pytest
 
+      - name: Black
+        run: |
+          black . --check
 
-   # - name: Lint code
-   #   run: |
-   #     flake8 .
+      #- name: Lint code
+      #  run: |
+      #    flake8 .
