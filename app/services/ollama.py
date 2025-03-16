@@ -22,7 +22,7 @@ def ollama_bot(context: str, query: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",  # Updated to 'gpt-4o' (faster & cheaper than 'gpt-4.o-mini')
+            model="gpt-4o-mini",  # using 'gpt-4o-mini' (faster & cheaper than 'gpt-4.o')
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt},
