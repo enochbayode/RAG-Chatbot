@@ -25,9 +25,6 @@ COPY . .
 EXPOSE 8080
 EXPOSE 11434
 
-# Copy the .env file
-COPY .env .
-
 # Modify the CMD to load the .env file
 CMD ["sh", "-c", "set -a && source .env && set +a && gunicorn -b 0.0.0.0:8080 app:app"]
 
