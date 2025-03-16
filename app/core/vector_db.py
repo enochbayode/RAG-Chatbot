@@ -23,11 +23,6 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# Load environment variables
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-    r"C:\Users\Enoch\Documents\telepracticepro-dev-bc536f445eca.json"
-)
-
 # Import GC bucket name
 BUCKET_NAME = os.getenv("BUCKET_NAME")
 
