@@ -56,6 +56,7 @@ gcs_client = storage.Client()
 
 MAX_RETRIES = 5  # Limit retries to avoid infinite looping
 
+
 async def generate_embedding(text: str):
     """Generate an embedding using OpenAI, with async retry logic and exponential backoff."""
     retries = 0  # Track retry attempts
@@ -145,8 +146,10 @@ async def upsert_document(db: Session, organization_id: str, doc_id: str):
         file_path = "/".join(file_url.split("/")[3:])  # Extract path in bucket
         file_path = unquote(file_path)  # Decode URL
 
-          # Download the PDF
-        local_pdf_path = await download_from_gcs(bucket_name, file_path)  # Ensure this is async
+        # Download the PDF
+        local_pdf_path = await download_from_gcs(
+            bucket_name, file_path
+        )  # Ensure this is async
 
         # Extract text from PDF
         text = await extract_text_from_pdf(local_pdf_path)  # Ensure this is async
@@ -171,6 +174,7 @@ async def upsert_document(db: Session, organization_id: str, doc_id: str):
 
 # Function to delete a document from GC, Pinecone & Postgres
 
+
 async def delete_document(db: Session, organization_id: str, doc_id: str):
     """Deletes document embedding from Pinecone, file from GCS, and record from PostgreSQL."""
     try:
@@ -188,12 +192,12 @@ async def delete_document(db: Session, organization_id: str, doc_id: str):
             raise ValueError(f"Invalid file URL format: {file_url}")
 
         # Use the actual bucket name
-        bucket_name = BUCKET_NAME  
+        bucket_name = BUCKET_NAME
         file_path = unquote(parsed_url.path.lstrip("/"))
 
         # Ensure file path does NOT include bucket name
         if file_path.startswith(f"{bucket_name}/"):
-            file_path = file_path[len(f"{bucket_name}/"):]
+            file_path = file_path[len(f"{bucket_name}/") :]
 
         # Initialize GCS client
         storage_client = storage.Client()
@@ -205,7 +209,9 @@ async def delete_document(db: Session, organization_id: str, doc_id: str):
         # Delete the PDF file from Google Cloud Storage
         try:
             blob.delete()
-            logging.info(f"✅ Successfully deleted file {file_path} from Google Cloud Storage.")
+            logging.info(
+                f"✅ Successfully deleted file {file_path} from Google Cloud Storage."
+            )
         except Exception as gcs_error:
             logging.warning(f"⚠️ Error deleting file {file_path}: {gcs_error}")
 
@@ -226,4 +232,6 @@ async def delete_document(db: Session, organization_id: str, doc_id: str):
     except Exception as e:
         logging.error(f"❌ Error in delete_document: {e}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting document: {str(e)}"
+        )

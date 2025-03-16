@@ -10,8 +10,11 @@ load_dotenv()
 
 router = APIRouter()
 
+
 @router.delete("/delete/{organization_id}/{document_id}")
-async def delete_pdf(organization_id: str, document_id: str, db: Session = Depends(get_db)):
+async def delete_pdf(
+    organization_id: str, document_id: str, db: Session = Depends(get_db)
+):
     """
     Deletes a PDF by calling `delete_document`, ensuring it belongs to the organization.
     """
@@ -25,13 +28,15 @@ async def delete_pdf(organization_id: str, document_id: str, db: Session = Depen
         .first()
     )
     if not doc:
-        raise HTTPException(status_code=404, detail="Document not found or access denied")
+        raise HTTPException(
+            status_code=404, detail="Document not found or access denied"
+        )
 
     await delete_document(db, organization_id, document_id)
 
     # Call the central delete function
     return {
-            "message": "PDF deleted successfully.",
-            "organization_id": organization_id,
-            "document_id": document_id
-        }
+        "message": "PDF deleted successfully.",
+        "organization_id": organization_id,
+        "document_id": document_id,
+    }
