@@ -1,8 +1,6 @@
 import uvicorn
-
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware 
 
 # Import routers
 from app.api.routes.upload import router as upload_router
@@ -28,7 +26,10 @@ app.include_router(delete_router, prefix="/api")
 
 @app.get("/")
 def home():
-    return RedirectResponse(url="/docs")
+    return {
+        "message": "Welcome to TelePractice Pro AI Assistant"
+    }
+
 
 # Run the app
 if __name__ == "__main__":
