@@ -1,12 +1,13 @@
+import jwt
+import os
 from fastapi import FastAPI, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
-import jwt
+from dotenv import load_dotenv
 
-
-app = FastAPI()
+load_dotenv()
 
 # JWT Secret Key
-JWT_SECRET_KEY = "1234888888"  # Use the secret key used for generating the token
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY") 
 
     
 def verify_token_http(credentials: HTTPAuthorizationCredentials):
