@@ -24,6 +24,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install build  # Explicitly install build package
 
       # Add a build step to ensure the code can be built
       - name: Build the project
@@ -36,6 +37,7 @@ jobs:
 
       - name: Black
         run: |
+          pip install black
           black . --check
 
       #- name: Lint code
