@@ -38,6 +38,7 @@ numpy
 pandas 
 urllib3  # Handles URL parsing and HTTP requests
 python-multipart
+jose
 
 flake8
 black

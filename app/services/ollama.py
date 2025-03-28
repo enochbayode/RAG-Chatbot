@@ -10,7 +10,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = openai.Client(api_key=OPENAI_API_KEY)
 
 
-def ollama_bot(context: str, query: str) -> str:
+async def ollama_bot(context: str, query: str) -> str:
     """
     Generates a response using OpenAI's GPT API.
 
