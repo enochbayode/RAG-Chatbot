@@ -1,6 +1,6 @@
 import jwt
 import os
-from fastapi import FastAPI, HTTPException, status
+from fastapi import HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 

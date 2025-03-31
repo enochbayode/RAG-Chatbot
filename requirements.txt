@@ -7,7 +7,7 @@ openai
 langchain-openai
 
 # Pinecone Vector Database
-pinecone-client
+pinecone
 langchain-pinecone  
 
 # Embeddings (OpenAI & Hugging Face)
@@ -33,13 +33,15 @@ python-dotenv
 pydantic  
 pydantic-settings  # If using Pydantic for env settings
 
+# User authentication
+PyJWT
+
 # Other Utilities
 requests  
 numpy  
 pandas 
 urllib3  # Handles URL parsing and HTTP requests
 python-multipart
-jose
 
 flake8
 black
