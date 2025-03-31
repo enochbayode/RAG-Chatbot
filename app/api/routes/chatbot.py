@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from app.core.db import get_db
-from app.services.rag import generate_response  # Use RAG for retrieval + response
+from app.services.rag import generate_response  
 from app.api.auth import verify_token_http
 
 router = APIRouter()

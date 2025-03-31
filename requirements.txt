@@ -7,7 +7,7 @@ openai
 langchain-openai
 
 # Pinecone Vector Database
-pinecone-client
+pinecone
 langchain-pinecone  
 
 # Embeddings (OpenAI & Hugging Face)
