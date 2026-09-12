@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.core.vector_db import upsert_organization_document, upsert_global_document
 from app.models.document import Document
-from app.models.organization import AppResource # telepracticepro resources 
+from app.models.organization import AppResource 
 from app.api.auth import verify_token_http
 import time 
 

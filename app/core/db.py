@@ -24,10 +24,10 @@ try:
         echo=False,  # Set to True for SQL query logging
     )
     print(engine)
-    print("✅ Connected to the database successfully!")
+    print("Connected to the database successfully!")
 
 except Exception as e:
-    print(f"❌ Connection failed: {e}")
+    print(f"Connection failed: {e}")
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

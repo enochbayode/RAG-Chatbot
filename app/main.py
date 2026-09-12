@@ -27,7 +27,7 @@ app.include_router(delete_router, prefix="/api")
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to TelePractice Pro AI Assistant"
+        "message": "Welcome to Telehealth AI Assistant API. Use the /api endpoints for interactions."
     }
 
 

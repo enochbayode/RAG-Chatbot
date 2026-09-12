@@ -11,7 +11,6 @@ load_dotenv()
 # Get API key and index name from environment variables
 pinecone_api_key = os.getenv("PINECONE_API_KEY")
 index_name = os.getenv("PINECONE_INDEX")
-TelepracticePro_ID = os.getenv("TELEPRACTICEPRO_ID")
 
 # Ensure API key is set
 if not pinecone_api_key:
@@ -52,7 +51,7 @@ async def retrieve_relevant_docs(query: str, organization_id: str):
         return relevant_docs
 
     except Exception as e:
-        print(f"❌ Error retrieving documents: {e}")
+        print(f"Error retrieving documents: {e}")
         return []
 
 async def generate_response(query: str, organization_id: str):

@@ -11,6 +11,3 @@ Then, open http://127.0.0.1:8000 in your browser to see the welcome message.
 
 The swagger for all the endpoints are available here: http://127.0.0.1:8000/docs
 
-# Troubleshooting
-docker build -t telepracticepro-chatbot .
-docker run -e PORT=8080 -p 8080:8080 telepracticepro-chatbot

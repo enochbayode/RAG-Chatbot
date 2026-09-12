@@ -36,13 +36,13 @@ pinecone_api_key = os.getenv("PINECONE_API_KEY")
 index_name = os.getenv("PINECONE_INDEX")
 
 if not pinecone_api_key:
-    raise ValueError("❌ PINECONE_API_KEY is missing in environment variables.")
+    raise ValueError("PINECONE_API_KEY is missing in environment variables.")
 
 pc = Pinecone(api_key=pinecone_api_key)
 
 if index_name not in [idx.name for idx in pc.list_indexes()]:
     raise ValueError(
-        f"❌ Pinecone index '{index_name}' does not exist. Please create it."
+        f"Pinecone index '{index_name}' does not exist. Please create it."
     )
 
 index = pc.Index(index_name)
@@ -104,13 +104,13 @@ async def generate_embedding_request(text: str):
 
         except openai.APIError as e:
             if getattr(e, "code", None) == "insufficient_quota":
-                logging.error("❌ OpenAI API quota exceeded. Check billing.")
+                logging.error("OpenAI API quota exceeded. Check billing.")
                 raise ValueError("OpenAI quota exceeded. Upgrade your plan.")
             else:
-                logging.error(f"❌ OpenAI API error: {e}")
+                logging.error(f"OpenAI API error: {e}")
                 raise e
             
-    logging.error("❌ Max retries reached. Failed to generate embedding.")
+    logging.error("Max retries reached. Failed to generate embedding.")
     raise RuntimeError("Max retries reached. OpenAI API not responding.")
 
 async def generate_organization_embedding(text: str):
@@ -118,7 +118,7 @@ async def generate_organization_embedding(text: str):
     word_count = len(text.split())
 
     if word_count > WORD_LIMIT_ORG:
-        raise ValueError(f"❌ Document exceeds {WORD_LIMIT_ORG} words. Reduce size and try again.")
+        raise ValueError(f"Document exceeds {WORD_LIMIT_ORG} words. Reduce size and try again.")
 
     chunks = chunk_text(text, word_limit=WORD_LIMIT_ORG)
     embeddings = await asyncio.gather(*[generate_embedding_request(chunk) for chunk in chunks])
@@ -151,7 +151,7 @@ async def extract_text_from_pdf(pdf_path: str):
 
         return text.strip()  # Return extracted text
     except Exception as e:
-        logging.error(f"❌ Error extracting text from PDF: {e}")
+        logging.error(f"Error extracting text from PDF: {e}")
         raise e
 
 async def download_from_gcs(bucket_name: str, file_url: str, is_organization: bool = False):
@@ -183,10 +183,10 @@ async def download_from_gcs(bucket_name: str, file_url: str, is_organization: bo
         local_path = os.path.join(download_dir, os.path.basename(file_path))
         blob.download_to_filename(local_path)
 
-        logging.info(f"✅ File downloaded to: {local_path}")
+        logging.info(f"File downloaded to: {local_path}")
         return local_path
     except Exception as e:
-        logging.error(f"❌ Error downloading from GCS: {e}")
+        logging.error(f"Error downloading from GCS: {e}")
         raise e
 
 
@@ -199,7 +199,7 @@ async def upsert_organization_document(db: Session, organization_id: str, doc_id
     try:
         document = db.query(Document).filter_by(chat_bot_resource_id=doc_id).first()
         if not document:
-            raise ValueError(f"❌ Document with ID {doc_id} not found.")
+            raise ValueError(f"Document with ID {doc_id} not found.")
 
         # Extract bucket name and file path
         file_url = document.file_url
@@ -207,12 +207,12 @@ async def upsert_organization_document(db: Session, organization_id: str, doc_id
         file_path = unquote("/".join(file_url.split("/")[3:]))  # Decode URL
 
         # Remove "telepracticepro-dev/" from file path
-        normalized_path = file_path.replace("telepracticepro-dev/", "", 1)
+        # normalized_path = file_path.replace("telepracticepro-dev/", "", 1)
 
         # Ensure document is in the correct business directory
         expected_prefix = f"organization/{organization_id}/pdfs/"
         if not normalized_path.startswith(expected_prefix):
-            raise ValueError(f"❌ File {file_path} is not in the correct business folder.")
+            raise ValueError(f"File {file_path} is not in the correct business folder.")
 
         # Download, extract text, and generate embeddings
         local_pdf_path = await download_from_gcs(bucket_name, file_path)
@@ -225,10 +225,10 @@ async def upsert_organization_document(db: Session, organization_id: str, doc_id
             namespace=organization_id,
         )
 
-        logging.info(f"✅ Business document {doc_id} successfully indexed.")
+        logging.info(f"Business document {doc_id} successfully indexed.")
 
     except Exception as e:
-        logging.error(f"❌ Error in upsert_business_document: {e}")
+        logging.error(f"Error in upsert_business_document: {e}")
         raise e
 
 
@@ -237,7 +237,7 @@ async def upsert_global_document(db: Session, organization_id, doc_id: str):
     try:
         document = db.query(AppResource).filter_by(app_resource_id=doc_id).first()
         if not document:
-            raise ValueError(f"❌ Document with ID {doc_id} not found.")
+            raise ValueError(f"Document with ID {doc_id} not found.")
 
         # Extract bucket name and file path
         file_url = document.file_url
@@ -247,11 +247,11 @@ async def upsert_global_document(db: Session, organization_id, doc_id: str):
         file_path = unquote("/".join(file_url.split("/")[3:]))  # Decode URL
 
         # Remove "telepracticepro-dev/" from file path
-        normalized_path = file_path.replace("telepracticepro-dev/", "", 1)
+        # normalized_path = file_path.replace("telepracticepro-dev/", "", 1)
         
         expected_prefix = f"{organization_id}/pdfs/"      #
         if not normalized_path.startswith(expected_prefix):
-            raise ValueError(f"❌ File {file_path} is not in the correct global folder.")
+            raise ValueError(f"File {file_path} is not in the correct global folder.")
 
         # Download, extract text, and generate embeddings
         local_pdf_path = await download_from_gcs(bucket_name, file_path)
@@ -268,10 +268,10 @@ async def upsert_global_document(db: Session, organization_id, doc_id: str):
             namespace=organization_id,
         )
 
-        logging.info(f"✅ Global document {doc_id} successfully indexed.")
+        logging.info(f"Global document {doc_id} successfully indexed.")
 
     except Exception as e:
-        logging.error(f"❌ Error in upsert_global_document: {e}")
+        logging.error(f"Error in upsert_global_document: {e}")
         raise e
 
 
@@ -284,7 +284,7 @@ async def delete_organization_document(db: Session, organization_id: str, doc_id
         # Fetch document from database
         document = db.query(Document).filter_by(chat_bot_resource_id=doc_id).first()
         if not document:
-            logging.error(f"❌ Document {doc_id} not found in database.")
+            logging.error(f"Document {doc_id} not found in database.")
             raise HTTPException(status_code=404, detail=f"Document {doc_id} not found.")
 
         # Extract bucket name and file path
@@ -303,21 +303,21 @@ async def delete_organization_document(db: Session, organization_id: str, doc_id
         bucket = storage_client.bucket(BUCKET_NAME)
         blob = bucket.blob(file_path)
         blob.delete()
-        logging.info(f"✅ Deleted file {file_path} from GCS.")
+        logging.info(f"Deleted file {file_path} from GCS.")
 
         # Delete from Pinecone
         index.delete(ids=[doc_id], namespace=organization_id)
-        logging.info(f"✅ Deleted document {doc_id} from Pinecone.")
+        logging.info(f"Deleted document {doc_id} from Pinecone.")
 
         # Delete from PostgreSQL
         db.delete(document)
         db.commit()
-        logging.info(f"✅ Deleted document {doc_id} from PostgreSQL.")
+        logging.info(f"Deleted document {doc_id} from PostgreSQL.")
 
         return {"message": "Business document deleted successfully", "document_id": doc_id}
 
     except Exception as e:
-        logging.error(f"❌ Error in delete_business_document: {e}")
+        logging.error(f"Error in delete_business_document: {e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
 
@@ -328,7 +328,7 @@ async def delete_global_document(db: Session, organization_id, doc_id: str):
         # Fetch document from database
         document = db.query(AppResource).filter_by(app_resource_id=doc_id).first()
         if not document:
-            logging.error(f"❌ Document {doc_id} not found in database.")
+            logging.error(f"Document {doc_id} not found in database.")
             raise HTTPException(status_code=404, detail=f"Document {doc_id} not found.")
 
         # Extract bucket name and file path
@@ -346,20 +346,20 @@ async def delete_global_document(db: Session, organization_id, doc_id: str):
         bucket = storage_client.bucket(BUCKET_NAME)
         blob = bucket.blob(file_path)
         blob.delete()
-        logging.info(f"✅ Deleted file {file_path} from GCS.")
+        logging.info(f"Deleted file {file_path} from GCS.")
 
         # Delete from Pinecone (Global Namespace)
         index.delete(ids=[doc_id], namespace=organization_id)
-        logging.info(f"✅ Deleted document {doc_id} from Pinecone.")
+        logging.info(f"Deleted document {doc_id} from Pinecone.")
 
         # Delete from PostgreSQL
         db.delete(document)
         db.commit()
-        logging.info(f"✅ Deleted document {doc_id} from PostgreSQL.")
+        logging.info(f"Deleted document {doc_id} from PostgreSQL.")
 
         return {"message": "Global document deleted successfully", "document_id": doc_id}
 
     except Exception as e:
-        logging.error(f"❌ Error in delete_global_document: {e}")
+        logging.error(f"Error in delete_global_document: {e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
